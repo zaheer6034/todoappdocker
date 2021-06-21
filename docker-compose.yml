@@ -1,0 +1,33 @@
+version: '3.3'
+services:
+  server:
+    build: ./server
+    ports:
+      - '8081:8081'
+    depends_on:
+      - database
+    volumes:
+      - ./server:/app
+    command: ['python3', 'main.py']
+  client:
+    build: ./client
+    ports:
+      - '3000:3000'
+    command: ['npm', 'start']
+  database:
+    # image: mongo
+    # ports:
+    #   - "27018:27018"
+    image : mongo
+    restart: always
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "root"
+      MONGO_INITDB_ROOT_PASSWORD: "root"
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+
+volumes:
+  mongodb_data_container:
